@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Costos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .filter-container input {
+            padding: 8px;
+            margin: 5px;
+        }
+        .filter-container button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dashboard de Costos</h1>
+
+    <div class="filter-container">
+        <label for="filterDate">Filtrar por fecha:</label>
+        <input type="date" id="filterDate">
+        <button onclick="filterData()">Filtrar</button>
+    </div>
+
+    <table id="costTable">
+        <thead>
+            <tr>
+                <th>ID Post</th>
+                <th>Costo Dalle</th>
+                <th>Costo Make.com</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se llenarán los datos de Google Sheets -->
+        </tbody>
+    </table>
+
+    <script>
+        // Función para cargar los datos de Google Sheets (suponiendo que tienes una API o un archivo CSV)
+        const loadData = async () => {
+            // Aquí puedes usar la API de Google Sheets o cargar un archivo CSV
+            const data = [
+                { id: 1, costoDalle: 0,04, costoMake: 0,02, fecha: '2025-03-01' },
+                { id: 2, costoDalle: 0,04, costoMake: 0,03, fecha: '2025-03-02' },
+                { id: 3, costoDalle: 0,04, costoMake: 0,01, fecha: '2025-03-03' }
+            ];
+
+            const tableBody = document.getElementById('costTable').getElementsByTagName('tbody')[0];
+            data.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = item.id;
+                row.insertCell(1).textContent = `$${item.costoDalle}`;
+                row.insertCell(2).textContent = `$${item.costoMake}`;
+                row.insertCell(3).textContent = item.fecha;
+            });
+        };
+
+        // Función para filtrar los datos por fecha
+        const filterData = () => {
+            const filterDate = document.getElementById('filterDate').value;
+            const rows = document.getElementById('costTable').getElementsByTagName('tbody')[0].rows;
+            
+            Array.from(rows).forEach(row => {
+                const date = row.cells[3].textContent;
+                if (filterDate && date !== filterDate) {
+                    row.style.display = 'none';
+                } else {
+                    row.style.display = '';
+                }
+            });
+        };
+
+        // Cargar los datos al iniciar la página
+        window.onload = loadData;
+    </script>
+
+</body>
+</html>
