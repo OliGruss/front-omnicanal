@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Fecha y Hora</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .calendar-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .datetime-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .datetime-container input {
+            padding: 8px;
+            margin: 5px;
+            width: 200px;
+        }
+        .start-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .start-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Selecciona Fecha y Hora</h1>
+
+    <div class="container">
+        <!-- Calendario -->
+        <div class="calendar-container">
+            <div id="calendar"></div>
+        </div>
+
+        <!-- Selector de hora -->
+        <div class="datetime-container">
+            <label for="time">Selecciona la hora:</label>
+            <input type="time" id="time" name="time">
+        </div>
+
+        <!-- Botón para comenzar -->
+        <button class="start-button" onclick="startUploading()">Comenzar a Subir</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.js"></script>
+
+    <script>
+        // Inicializar el calendario
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                selectable: true,
+                select: function(startDate, endDate) {
+                    // Actualizar la fecha seleccionada en el calendario
+                    const selectedDate = startDate.format('YYYY-MM-DD');
+                    document.getElementById('selectedDate').value = selectedDate;
+                    alert("Fecha seleccionada: " + selectedDate);
+                }
+            });
+        });
+
+        // Función para manejar el clic en "Comenzar a Subir"
+        function startUploading() {
+            const selectedDate = document.getElementById('selectedDate') ? document.getElementById('selectedDate').value : '';
+            const selectedTime = document.getElementById('time').value;
+
+            if (!selectedDate || !selectedTime) {
+                alert("Por favor, selecciona una fecha y una hora.");
+                return;
+            }
+
+            const selectedDateTime = selectedDate + ' ' + selectedTime;
+            alert("Subida comenzada para: " + selectedDateTime);
+            // Aquí puedes agregar lógica adicional para procesar la fecha y hora seleccionada
+        }
+    </script>
+
+</body>
+</html>
