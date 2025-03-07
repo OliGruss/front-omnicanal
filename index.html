@@ -1,0 +1,191 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Left</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex; 
+            height: 100vh; 
+        }
+
+        .menu {
+            width: 190px;
+            background-color: #ffffff;
+            padding: 20px;
+            box-sizing: border-box; 
+            height: 100%; 
+            position: relative; 
+        }
+
+        .menu::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 2px; 
+            height: 100%;
+            background-color: #f0f0f0;
+            box-shadow: -7px 0 0 white, -5px 0 0 #f0f0f0;
+            margin-right: 2px;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .menu li {
+            margin-bottom: 24px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #eee;
+        }
+
+        .menu a::before {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 3px;
+            background-size: cover;
+            background-image: var(--icon);
+            background-color: transparent !important;
+        }
+
+        .content {
+            flex: 1; 
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            display: flex; 
+            min-height: 100%;
+        }
+
+        .content-area {
+            margin-left: 0px; 
+        }
+
+        .grey-container {
+            width: 500px;
+            height: 80%;
+            background-color: #F0F0F0;
+            position: absolute;
+            left: 10px;
+            border-radius: 10px;
+            top: 98px;
+        }
+
+        .light-grey-container {
+            width: 500px;
+            height: 80%;
+            background-color: #F0F0F0; 
+            position: absolute;
+            left: 550px; 
+            border-radius: 10px;
+             top: 98px;
+        }
+
+        .vertical-line {
+            display: none;
+        }
+
+      
+
+        .horizontal-line-con {
+            position: absolute;
+            top: 90px;
+            left: 10px;
+            width: 100%;
+            height: 2px;
+            background-color: #A9A9A9;
+            z-index: 99;
+        }
+
+        .horizontal-line {
+            position: absolute;
+            top: 80px;
+            left: 10px;
+            width: 100%;
+            height: 2px;
+            background-color: #A9A9A9;
+            z-index: 99;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="menu">
+        <ul>
+            <li><span style="font-weight: bold; font-family: sans-serif; margin-bottom: 5px; display: block; text-align: left; position: relative; top: -13px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40px" height="40px" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px;">
+                    <path d="M16.955,4.739 L31.045,4.739 C32.668,4.739 34.081,6.152 34.081,7.775 L34.081,11.592 C34.081,13.215 35.495,14.628 37.118,14.628 L43.225,14.628 C44.848,14.628 46.261,16.042 46.261,17.665 L46.261,30.335 C46.261,31.958 44.848,33.372 43.225,33.372 L37.118,33.372 C35.495,33.372 34.081,34.785 34.081,36.408 L34.081,40.225 C34.081,41.848 32.668,43.261 31.045,43.261 L16.955,43.261 C15.332,43.261 13.919,41.848 13.919,40.225 L13.919,36.408 C13.919,34.785 12.505,33.372 10.882,33.372 L4.775,33.372 C3.152,33.372 1.739,31.958 1.739,30.335 L1.739,17.665 C1.739,16.042 3.152,14.628 4.775,14.628 L10.882,14.628 C12.505,14.628 13.919,13.215 13.919,11.592 L13.919,7.775 C13.919,6.152 15.332,4.739 16.955,4.739 Z M24.000,38.000 C27.537,38.000 30.444,35.094 30.444,31.556 C30.444,28.019 27.537,25.113 24.000,25.113 C20.463,25.113 17.556,28.019 17.556,31.556 C17.556,35.094 20.463,38.000 24.000,38.000 Z M8.000,20.000 L8.000,22.000 C9.105,22.000 10.000,22.895 10.000,24.000 L12.000,24.000 C12.000,21.791 10.209,20.000 8.000,20.000 Z M40.000,20.000 C37.791,20.000 36.000,21.791 36.000,24.000 L38.000,24.000 C38.000,22.895 38.895,22.000 40.000,22.000 L40.000,20.000 Z"/>
+                </svg>
+                SMB</span>
+                 <p style="font-size: 12px; color: #555; margin-top: -4px; margin-bottom: 0px; display: block; text-align: left; position: relative; top: -16px;">Modulo de la zaraza</p>
+             <hr style="border: none; border-bottom: 2px solid #ccc; margin: 32px 0 24px 0;">
+            </li>
+            <li><a href="#menuopt" onclick="showMenu('menuopt')" style="--icon: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z\'/%3E%3C/svg%3E');">Opt</a></li>
+            <li><a href="#menugen" onclick="showMenu('menugen')" style="--icon: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z\'/%3E%3Cpath d=\'M12 20h9\'/%3E%3C/svg%3E');">Gen POS IA</a></li>
+            <li><a href="#menuautogen" onclick="showMenu('menuautogen')" style="--icon: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Crect x=\'2\' y=\'3\' width=\'20\' height=\'18\' rx=\'2\' ry=\'2\'/%3E%3Cline x1=\'9\' y1=\'7\' x2=\'15\' y2=\'7\'/%3E%3Cline x1=\'9\' y1=\'11\' x2=\'15\' y2=\'11\'/%3E%3Cline x1=\'9\' y1=\'15\' x2=\'13\' y2=\'15\'/%3E%3C/svg%3E');">Auto gen</a></li>
+            <li><a href="#menuver" onclick="showMenu('menuver')" style="--icon: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z\'/%3E%3C/svg%3E');">Planif</a></li>
+            <li><a href="#menudash" onclick="showMenu('menudash')" style="--icon: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Crect x=\'2\' y=\'3\' width=\'20\' height=\'18\' rx=\'2\' ry=\'2\'/%3E%3Cline x1=\'9\' y1=\'7\' x2=\'15\' y2=\'7\'/%3E%3Cline x1=\'9\' y1=\'11\' x2=\'15\' y2=\'11\'/%3E%3Cline x1=\'9\' y1=\'15\' x2=\'13\' y2=\'15\'/%3E%3C/svg%3E');">Dash</a></li>
+        </ul>
+    </div> 
+
+    <div class="content" id = "content">
+        <div style="position: absolute; top: 58px; right: 10px; display: flex; align-items: center;">
+            <span style="margin-right: 20px; color: #555;">SDK</span>
+            <span style="margin-right: 20px; color: #555;">Usuario</span>
+            <span style="color: #555;">Log Out</span>		
+        </div>
+        <div class="horizontal-line"></div>
+        <div style="position: absolute; left: 40%; transform: translateX(-20%) translateX(-30px); top: 20px; text-align: center;">
+        </div>
+        <div class="grey-container">
+            <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-align: center;">
+              <h2>Generador de Posts</h2>
+            </div>
+        </div>
+        <div class="light-grey-container">
+        </div>
+        <div class="content-area" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, 231%); text-align: center;">
+        </div>
+
+    <div class="horizontal-line-con"></div>
+    </div>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.style.left = menu.style.left === '0px' ? '-250px' : '0px';
+        }
+        function showMenu(menuName) {
+            const content = document.getElementById('content');
+            if (menuName === 'menugen') {
+                content.innerHTML = '<iframe src="pages/crear_posts.html" style="width:100%; height:100vh; border:none;"></iframe>';
+            } else if (menuName === 'menuver') {
+                content.innerHTML = '<iframe src="pages/ver_posts.html" style="width:100%; height:100vh; border:none;"></iframe>';
+            } else {
+                content.innerHTML = `<h1>${menuName}</h1><p>Contenido de ${menuName}</p>`;
+            }
+        }
+    </script>
+
+</body>
+</html>
