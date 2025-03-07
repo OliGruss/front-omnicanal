@@ -56,7 +56,7 @@
         <a href="#menu4" onclick="showMenu('menu4')">Menú 4</a>
     </div>
     <div class="content" id="content">
-        <iframe src="/pages/crear_posts.html" style="width:100%; height:100vh; border:none;"></iframe>
+        <iframe src="https://oligruss.github.io/pages/crear_posts.html" style="width:100%"; height=100vh; border:none;"></iframe>
     </div>
     <script>
         function toggleMenu() {
@@ -66,9 +66,9 @@
         function showMenu(menuName) {
             const content = document.getElementById('content');
             if (menuName === 'menu1') {
-                content.innerHTML = '<iframe src="/pages/crear_posts.html" style="width:100%; height:100vh; border:none;"></iframe>';
+                content.innerHTML = '<iframe src="https://oligruss.github.io/pages/crear_posts.html" style="width:100%"; height=100vh; border:none;"></iframe>';
             } else if (menuName === 'menu2') {
-                content.innerHTML = '<iframe src="/pages/ver_posts.html" style="width:100%; height:100vh; border:none;"></iframe>';
+                content.innerHTML = '<iframe src="https://oligruss.github.io/pages/ver_posts.html" style="width:100%"; height=100vh; border:none;"></iframe>';
             } else {
                 content.innerHTML = `<h1>${menuName}</h1><p>Contenido de ${menuName}</p>`;
             }
