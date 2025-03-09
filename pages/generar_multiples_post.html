@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Posts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff;
+            margin: 0;
+            overflow: hidden;
+        }
+        .wrapper {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
+        }
+        .container {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            overflow: auto;
+        }
+        .divider {
+            width: 2px;
+            background-color: #ccc;
+            margin: 0 20px;
+        }
+        textarea, input, select, button {
+            width: calc(100% - 24px);
+            margin-top: 10px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
+        }
+        label {
+            margin-top: 15px;
+            display: block;
+            font-weight: bold;
+        }
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+        button {
+            background-color: #444;
+            color: white;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        img {
+            max-width: 100%;
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .post-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container" id="inputs">
+            <h3>Generador de Post</h3>
+            <label>Prompt del Texto:</label>
+            <textarea id="text-prompt"></textarea>
+            
+            <label>Prompt de Imagen:</label>
+            <select id="image-option" onchange="toggleImageInput()">
+                <option value="generate" selected>Generar con IA</option>
+                <option value="upload">Subir Imagen</option>
+            </select>
+            <textarea id="image-prompt"></textarea>
+            <input type="file" id="image-upload" class="hidden">
+            
+            <label>Prompt de Hashtags:</label>
+            <textarea id="hashtag-prompt"></textarea>
+            
+            <label>Cantidad de Posts (1-21):</label>
+            <input type="number" id="post-quantity" min="1" max="21" value="1">
+            
+            <button onclick="generatePost()">Generar Posts</button>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="container" id="preview">
+            <h3>Vista Previa de los Posts</h3>
+            <div id="posts-container"></div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleImageInput() {
+            const option = document.getElementById("image-option").value;
+            document.getElementById("image-prompt").style.display = option === "generate" ? "block" : "none";
+            document.getElementById("image-upload").style.display = option === "upload" ? "block" : "none";
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleImageInput();
+        });
+        
+        async function generatePost() {
+            const textPrompt = document.getElementById("text-prompt").value;
+            const imageOption = document.getElementById("image-option").value;
+            const imagePrompt = document.getElementById("image-prompt").value;
+            const hashtagPrompt = document.getElementById("hashtag-prompt").value;
+            const postQuantity = document.getElementById("post-quantity").value;
+            const imageUpload = document.getElementById("image-upload").files[0];
+            
+            const formData = new FormData();
+            formData.append("text_prompt", textPrompt);
+            formData.append("image_option", imageOption);
+            formData.append("image_prompt", imagePrompt);
+            formData.append("hashtag_prompt", hashtagPrompt);
+            formData.append("post_quantity", postQuantity);
+            
+            if (imageUpload) {
+                formData.append("uploaded_image", imageUpload);
+            }
+            
+            fetch("https://hook.us2.make.com/p9xq7wilynrw8apvf82zm4gc3aqftmc3", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const postsContainer = document.getElementById("posts-container");
+                postsContainer.innerHTML = "";
+                data.forEach(post => {
+                    const postElement = document.createElement("div");
+                    postElement.classList.add("post-container");
+                    postElement.innerHTML = `
+                        <p>${post.text}</p>
+                        <img src="${post.image_url}" alt="Imagen del post">
+                        <button onclick="deletePost(this)">Eliminar Post</button>
+                        <button onclick="addToQueue(this)">Agregar a la Lista</button>
+                    `;
+                    postsContainer.appendChild(postElement);
+                });
+            })
+            .catch(error => console.error("Error:", error));
+        }
+        
+        function deletePost(button) {
+            button.parentElement.remove();
+        }
+        
+        function addToQueue(button) {
+            alert("Post agregado a la lista");
+        }
+    </script>
+</body>
+</html>
