@@ -9,36 +9,48 @@
         body {
             font-family: 'Roboto', sans-serif;
             display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: #f9f9f9;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff;
+            margin: 0;
+            overflow: hidden;
+        }
+        .wrapper {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
         }
         .container {
-            background-color: #f0f0f0;
+            background-color: #f7f7f7;
             padding: 20px;
             border-radius: 10px;
-            width: 30%;
+            flex: 1;
+            overflow: auto;
         }
-        .option-container {
-            background-color: #e0e0e0;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-        .full-width {
-            width: 90%;
-            margin-top: 10px;
+        .divider {
+            width: 2px;
+            background-color: #ccc;
+            margin: 0 20px;
         }
         textarea, input, select, button {
-            width: 90%;
+            width: calc(100% - 24px);
             margin-top: 10px;
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 10px;
             font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
+        }
+        label {
+            margin-top: 15px;
+            display: block;
+            font-weight: bold;
         }
         textarea {
             height: 100px;
+            resize: none;
         }
         button {
             background-color: #444;
@@ -49,63 +61,82 @@
         button:hover {
             background-color: #333;
         }
+        img {
+            max-width: 100%;
+            margin-top: 10px;
+        }
         .hidden {
             display: none;
+        }
+        .post-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .warning {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="settings">
-        <h3>Opciones</h3>
-        <div class="option-container">
-            <label>Seleccionar Redes Sociales:</label>
-            <div>
-                <label><input type="checkbox" name="social" value="Twitter"> Twitter</label>
-                <label><input type="checkbox" name="social" value="Instagram"> Instagram</label>
-                <label><input type="checkbox" name="social" value="Facebook"> Facebook</label>
-                <label><input type="checkbox" name="social" value="LinkedIn"> LinkedIn</label>
-            </div>
+    <div class="wrapper">
+        <div class="container" id="inputs">
+            <h3>Generador de Post</h3>
+            <label>Prompt del Texto:</label>
+            <textarea id="text-prompt"></textarea>
+            
+            <label>Prompt de Imagen:</label>
+            <input type="file" id="image-upload">
+            
+            <button id="generate-button" onclick="generatePost()">Generar Post</button>
         </div>
         
-        <div class="option-container">
-            <label>Seleccionar Plan:</label>
-            <select>
-                <option>1 post/día por 21 días</option>
-                <option>2 posts/día por 21 días</option>
-                <option>3 posts/día por 21 días</option>
-            </select>
+        <div class="divider"></div>
+        
+        <div class="container" id="preview">
+            <h3>Vista Previa del Post</h3>
+            <div id="posts-container"></div>
         </div>
-        
     </div>
     
-    <div class="container" id="inputs">
-        <h3>Generador de Post</h3>
-        <label>Texto del post:</label>
-        <textarea id="text-prompt"></textarea>
-        
-        <label>Imagen del post:</label>
-        <input type="file" id="image-upload" class="full-width">
-
-        
-        <button class="full-width" onclick="generatePost()">Crear Post</button>
-    </div>
-    
-    <div class="container" id="preview">
-        <h3>Vista Previa del Post</h3>
-        <p id="post-text">Texto del post aparecerá aquí...</p>
-        <img id="post-image" src="" alt="Imagen del post" style="max-width:100%; display:none;">
-        <button class="full-width" onclick="deletePost()">Eliminar Post</button>
-        <button class="full-width" onclick="addToQueue()">Agregar a la Lista</button>
-    </div>
-    
-    <script>        
+    <script>
+	
+	async function generatePost() {
+            
+            const textPrompt = document.getElementById("text-prompt").value;
+            const imageUpload = document.getElementById("image-upload").files[0];
+	    const userImageUrl = URL.createObjectURL(imageUpload);
+            
+            const postElement = document.createElement("div");
+            postElement.classList.add("post-container");
+            postElement.innerHTML = `
+                <p>${textPrompt}</p>
+                <img src=userImageUrl alt="Imagen del post">
+                <button onclick="deletePost(this)">Eliminar Post</button>
+                <button onclick="addToQueue(this, '${textPrompt}', '${userImageUrl}')">Agregar a la Lista</button>
+            `;
+        }
+     
         function deletePost() {
             document.getElementById("post-text").innerText = "Tu post aparecerá aquí...";
             document.getElementById("post-image").style.display = "none";
         }
         
         function addToQueue() {
-            alert("Post agregado a la cola");
+            const text = document.getElementById("text-prompt").value;
+            const selectedSocials = JSON.parse(localStorage.getItem('selectedSocials')) || [];
+            const selectedPlan = localStorage.getItem('selectedPlan') || '';
+            
+            if (!text.trim()) {
+                alert("Por favor, ingresa un texto para el post.");
+                return;
+            }
+            
+            alert(`Post agregado a la lista:\nTexto: ${text}\nRedes: ${selectedSocials.join(", ")}\nPlan: ${selectedPlan}`);
         }
     </script>
 </body>
