@@ -99,7 +99,7 @@
             <p id="post-text">Texto del post aparecerá aquí...</p>
             <img id="post-image" src="" alt="Imagen del post">
             <button onclick="deletePost()">Eliminar Post</button>
-	    <button class="full-width" onclick="addToQueue()">Agregar a la Lista</button>
+	    <button class="full-width" onclick="addToQueue(document.getElementById("post-text").innerText, document.getElementById("post-image").src)">Agregar a la Lista</button>
         </div>
     </div>
     
@@ -157,8 +157,18 @@
             document.getElementById("post-image").style.display = "none";
         }
 
-	function addToQueue() {
-            alert("Post agregado a la cola");
+	function addToQueue(text, imageUrl) {
+            fetch("https://hook.us2.make.com/hbp2oxmftvm7dw0fto6orf3qvblg19km", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: text, image_url: imageUrl })
+            })
+            .then(response => response.json())
+            .then(() => {
+                alert("Post agregado a la lista");
+                button.parentElement.remove();
+            });
+	    alert("Post agregado a la cola");
         }
     </script>
 </body>
