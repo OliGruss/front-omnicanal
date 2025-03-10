@@ -89,7 +89,7 @@
             <label>Prompt de Hashtags:</label>
             <textarea id="hashtag-prompt"></textarea>
             
-            <button id="generate-button" onclick="generatePost()">Generar Posts</button>
+            <button id="generate-button" onclick="generatePost()">Generar Post</button>
         </div>
         
         <div class="divider"></div>
@@ -121,7 +121,7 @@
             const imageOption = document.getElementById("image-option").value;
             const imagePrompt = document.getElementById("image-prompt").value;
             const hashtagPrompt = document.getElementById("hashtag-prompt").value;
-            const postQuantity = document.getElementById("post-quantity").value;
+            const postQuantity = 1;
             const imageUpload = document.getElementById("image-upload").files[0];
             
             const formData = new FormData();
@@ -162,7 +162,7 @@
             })
             .catch(error => console.error("Error:", error))
             .finally(() => {
-                button.textContent = "Generar Posts";
+                button.textContent = "Generar Post";
                 button.disabled = false;
             });
         }
