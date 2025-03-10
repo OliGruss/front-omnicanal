@@ -98,8 +98,6 @@
             <h3>Vista Previa del Post</h3>
             <p id="post-text">Texto del post aparecerá aquí...</p>
             <img id="post-image" src="" alt="Imagen del post">
-            <button onclick="deletePost()">Eliminar Post</button>
-	    <button class="full-width" onclick="addToQueue(document.getElementById('post-text').innerText, document.getElementById('post-image').src)">Agregar a la Lista</button>
         </div>
     </div>
     
@@ -115,49 +113,65 @@
         });
         
         async function generatePost() {
+            const button = document.getElementById("generate-button");
+            button.textContent = "Generando posts...";
+            button.disabled = true;
+            
             const textPrompt = document.getElementById("text-prompt").value;
             const imageOption = document.getElementById("image-option").value;
             const imagePrompt = document.getElementById("image-prompt").value;
             const hashtagPrompt = document.getElementById("hashtag-prompt").value;
+            const postQuantity = document.getElementById("post-quantity").value;
             const imageUpload = document.getElementById("image-upload").files[0];
-
-            // Crear FormData para enviar archivo si el usuario subió una imagen
+            
             const formData = new FormData();
             formData.append("text_prompt", textPrompt);
             formData.append("image_option", imageOption);
             formData.append("image_prompt", imagePrompt);
             formData.append("hashtag_prompt", hashtagPrompt);
-    
+            formData.append("post_quantity", 1);
+            
             if (imageUpload) {
                 formData.append("uploaded_image", imageUpload);
             }
-
-            fetch("https://hook.us2.make.com/s3vz277qac26c0yr9auxflej55n3koq5", {
+            
+            fetch("https://hook.us2.make.com/p9xq7wilynrw8apvf82zm4gc3aqftmc3", {
                 method: "POST",
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-        
-                // Si el usuario subió una imagen, mostrar la suya; si no, mostrar la de Make.com
-                if (imageOption === "upload") {
-                    const userImageUrl = URL.createObjectURL(imageUpload);
-                    document.getElementById("post-image").src = userImageUrl;
-                } else if (imageOption === "generate") {
-                    document.getElementById("post-image").src = data.image_url;
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
                 }
-                document.getElementById("post-text").innerText = data.post_text;
-                document.getElementById("post-image").style.display = "block";
+                throw new Error("Error en la generación de posts");
             })
-            .catch(error => console.error("Error:", error));
+            .then(data => {
+                const postsContainer = document.getElementById("posts-container");
+                postsContainer.innerHTML = "";
+                data.forEach(post => {
+                    const postElement = document.createElement("div");
+                    postElement.classList.add("post-container");
+                    postElement.innerHTML = `
+                        <p>${post.text}</p>
+                        <img src="${post.image_url}" alt="Imagen del post">
+                        <button onclick="deletePost(this)">Eliminar Post</button>
+                        <button onclick="addToQueue(this, '${post.text}', '${post.image_url}')">Agregar a la Lista</button>
+                    `;
+                    postsContainer.appendChild(postElement);
+                });
+            })
+            .catch(error => console.error("Error:", error))
+            .finally(() => {
+                button.textContent = "Generar Posts";
+                button.disabled = false;
+            });
         }
         
-        function deletePost() {
-            document.getElementById("post-text").innerText = "Texto del post aparecerá aquí...";
-            document.getElementById("post-image").style.display = "none";
+        function deletePost(button) {
+            button.parentElement.remove();
         }
-
-	function addToQueue(text, imageUrl) {
+        
+        function addToQueue(button, text, imageUrl) {
             fetch("https://hook.us2.make.com/hbp2oxmftvm7dw0fto6orf3qvblg19km", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -168,7 +182,6 @@
                 alert("Post agregado a la lista");
                 button.parentElement.remove();
             });
-	    alert("Post agregado a la cola");
         }
     </script>
 </body>
