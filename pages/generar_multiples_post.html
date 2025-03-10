@@ -169,7 +169,7 @@
                         <p>${post.text}</p>
                         <img src="${post.image_url}" alt="Imagen del post">
                         <button onclick="deletePost(this)">Eliminar Post</button>
-                        <button onclick="addToQueue(this)">Agregar a la Lista</button>
+                        <button onclick="addToQueue(this, '${post.text}', '${post.image_url}')">Agregar a la Lista</button>
                     `;
                     postsContainer.appendChild(postElement);
                 });
@@ -185,8 +185,17 @@
             button.parentElement.remove();
         }
         
-        function addToQueue(button) {
-            alert("Post agregado a la lista");
+        function addToQueue(button, text, imageUrl) {
+            fetch("https://hook.us2.make.com/hbp2oxmftvm7dw0fto6orf3qvblg19km", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: text, image_url: imageUrl })
+            })
+            .then(response => response.json())
+            .then(() => {
+                alert("Post agregado a la lista");
+                button.parentElement.remove();
+            });
         }
     </script>
 </body>
