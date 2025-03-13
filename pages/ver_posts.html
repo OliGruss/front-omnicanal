@@ -9,6 +9,17 @@
         body {
             font-family: 'Roboto', sans-serif;
             padding: 20px;
+            display: flex;
+        }
+        .social-container {
+            width: 30%;
+            padding: 15px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+        .posts-container {
+            width: 70%;
         }
         .post-container {
             background: #f0f0f0;
@@ -20,13 +31,14 @@
             max-width: 100%;
             height: auto;
             display: block;
-            margin-top: 10px;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Ver posts</h1>
-    <div id="posts"></div>
+    <div class="social-container" id="socials"></div>
+    <div class="posts-container" id="posts"></div>
+    
     <script>
         function fetchPosts() {
             const sheetUrl = 'https://sheet2api.com/v1/2F7lOBF0Qief/posts'; // Reemplazar con la URL correcta
@@ -34,13 +46,35 @@
                 .then(response => response.json())
                 .then(data => {
                     const postsContainer = document.getElementById('posts');
+                    const socialsContainer = document.getElementById('socials');
                     postsContainer.innerHTML = '';
+                    socialsContainer.innerHTML = '';
+                    
                     data.forEach(post => {
+                        // Crear el bloque de redes sociales
+                        const socialNetworks = [];
+                        if (post.subir_facebook === "TRUE") socialNetworks.push("Facebook");
+                        if (post.subir_instagram === "TRUE") socialNetworks.push("Instagram");
+                        if (post.subir_twitter === "TRUE") socialNetworks.push("Twitter");
+                        if (post.subir_linkedin === "TRUE") socialNetworks.push("LinkedIn");
+
+                        const socialText = socialNetworks.length > 0 ?
+                            `Se subirá a: ${socialNetworks.join(", ")}` :
+                            "No se subirá a ninguna red social";
+
+                        socialsContainer.innerHTML += `
+                            <div class="post-container">
+                                <p><strong>ID ${post.id}</strong></p>
+                                <p>${socialText}</p>
+                            </div>
+                        `;
+                        
+                        // Crear el bloque de post
                         postsContainer.innerHTML += `
                             <div class="post-container">
                                 <p><strong>ID ${post.id}</strong></p>
-                                <p>${post.text}</p>
                                 <img src="${post.image}" alt="Imagen del post">
+                                <p>${post.text}</p>
                             </div>
                         `;
                     });
