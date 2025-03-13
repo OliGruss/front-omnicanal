@@ -85,18 +85,17 @@
 <body>
     <div class="wrapper">
         <div class="container" id="inputs">
-            <h3>Generador de Post</h3>
+            <h3>Generar multiples posts</h3>
             <p class="warning">⚠ Atención: Generar múltiples posts a la vez puede demorar algunos minutos.</p>
-            <label>Prompt del Texto:</label>
-            <textarea id="text-prompt"></textarea>
+
+	    <label>Descripción de tu empresa:</label>
+            <textarea id="description"></textarea>
             
             <label>Prompt de Imagen:</label>
-            <select id="image-option" onchange="toggleImageInput()">
-                <option value="generate" selected>Generar con IA</option>
-                <option value="upload">Subir Imagen</option>
-            </select>
             <textarea id="image-prompt"></textarea>
-            <input type="file" id="image-upload" class="hidden">
+
+	    <label>Prompt del Texto:</label>
+            <textarea id="text-prompt"></textarea>
             
             <label>Prompt de Hashtags:</label>
             <textarea id="hashtag-prompt"></textarea>
@@ -116,40 +115,26 @@
     </div>
     
     <script>
-        function toggleImageInput() {
-            const option = document.getElementById("image-option").value;
-            document.getElementById("image-prompt").style.display = option === "generate" ? "block" : "none";
-            document.getElementById("image-upload").style.display = option === "upload" ? "block" : "none";
-        }
-        
-        document.addEventListener("DOMContentLoaded", function() {
-            toggleImageInput();
-        });
         
         async function generatePost() {
             const button = document.getElementById("generate-button");
             button.textContent = "Generando posts...";
             button.disabled = true;
             
+	    const description = document.getElementById("description").value;
             const textPrompt = document.getElementById("text-prompt").value;
-            const imageOption = document.getElementById("image-option").value;
             const imagePrompt = document.getElementById("image-prompt").value;
             const hashtagPrompt = document.getElementById("hashtag-prompt").value;
             const postQuantity = document.getElementById("post-quantity").value;
-            const imageUpload = document.getElementById("image-upload").files[0];
             
             const formData = new FormData();
+            formData.append("description", description);
             formData.append("text_prompt", textPrompt);
-            formData.append("image_option", imageOption);
             formData.append("image_prompt", imagePrompt);
             formData.append("hashtag_prompt", hashtagPrompt);
             formData.append("post_quantity", postQuantity);
             
-            if (imageUpload) {
-                formData.append("uploaded_image", imageUpload);
-            }
-            
-            fetch("https://hook.us2.make.com/p9xq7wilynrw8apvf82zm4gc3aqftmc3", {
+            fetch("https://hook.us2.make.com/t532zv3rrmlgwgs7sbh4yoqduprxyai9", {
                 method: "POST",
                 body: formData
             })
@@ -185,17 +170,46 @@
             button.parentElement.remove();
         }
         
-        function addToQueue(button, text, imageUrl) {
-            fetch("https://hook.us2.make.com/hbp2oxmftvm7dw0fto6orf3qvblg19km", {
+        function addToQueue(button, texto, imageUrl) {
+            const text = document.getElementById("text-prompt").value;
+            const selectedSocials = JSON.parse(localStorage.getItem('selectedSocials')) || [];
+            const selectedPlan = localStorage.getItem('selectedPlan') || '';
+
+	    facebook = false;
+	    instagram = false;
+	    twitter = false;
+	    linkedin = false;
+
+            if (selectedSocials.includes("Todas")) {
+                facebook = true;
+	    	instagram = true;
+	        twitter = true;
+		linkedin = true;
+            } else {
+		if (selectedSocials.includes("Facebook")) {
+		    facebook = true;
+		}
+		if (selectedSocials.includes("Instagram")) {
+		    instagram = true;
+		}
+		if (selectedSocials.includes("Twitter")) {
+		    twitter = true;
+		}
+		if (selectedSocials.includes("LinkedIn")) {
+		    linkedin = true;
+		}
+	    }
+            fetch("https://hook.us2.make.com/l993pgjswc37jo0vngq6w149tg8ywube", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: text, image_url: imageUrl })
+                body: JSON.stringify({ text: texto, image_url: imageUrl, facebook: facebook, instagram: instagram, twitter: twitter, linkedin: linkedin })
             })
             .then(response => response.json())
             .then(() => {
                 alert("Post agregado a la lista");
                 button.parentElement.remove();
             });
+	    
         }
     </script>
 </body>
