@@ -85,12 +85,12 @@
 <body>
     <div class="wrapper">
         <div class="container" id="inputs">
-            <h3>Generador de Post</h3>
-            <label>Prompt del Texto:</label>
+            <h3>Generador Manual</h3>
+            <label>Texto del post:</label>
             <textarea id="text-prompt"></textarea>
             
-            <label>Prompt de Imagen:</label>
-            <input type="file" id="image-upload">
+            <label>Imagen del post:</label>
+            <input type="file" id="image-upload" accept="image/*">
             
             <button id="generate-button" onclick="generatePost()">Generar Post</button>
         </div>
@@ -126,17 +126,46 @@
             document.getElementById("post-image").style.display = "none";
         }
         
-        function addToQueue() {
+        function addToQueue(button, texto, imageUrl) {
             const text = document.getElementById("text-prompt").value;
             const selectedSocials = JSON.parse(localStorage.getItem('selectedSocials')) || [];
             const selectedPlan = localStorage.getItem('selectedPlan') || '';
-            
-            if (!text.trim()) {
-                alert("Por favor, ingresa un texto para el post.");
-                return;
-            }
-            
-            alert(`Post agregado a la lista:\nTexto: ${text}\nRedes: ${selectedSocials.join(", ")}\nPlan: ${selectedPlan}`);
+
+	    facebook = false;
+	    instagram = false;
+	    twitter = false;
+	    linkedin = false;
+
+            if (selectedSocials.includes("Todas")) {
+                facebook = true;
+	    	instagram = true;
+	        twitter = true;
+		linkedin = true;
+            } else {
+		if (selectedSocials.includes("Facebook")) {
+		    facebook = true;
+		}
+		if (selectedSocials.includes("Instagram")) {
+		    instagram = true;
+		}
+		if (selectedSocials.includes("Twitter")) {
+		    twitter = true;
+		}
+		if (selectedSocials.includes("LinkedIn")) {
+		    linkedin = true;
+		}
+	    }
+            fetch("https://hook.us2.make.com/l993pgjswc37jo0vngq6w149tg8ywube", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: texto, image_url: imageUrl, facebook: facebook, instagram: instagram, twitter: twitter, linkedin: linkedin })
+            })
+            .then(response => response.json())
+            .then(() => {
+                alert("Post agregado a la lista");
+                button.parentElement.remove();
+            });
+	    
         }
     </script>
 </body>
