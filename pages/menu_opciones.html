@@ -53,7 +53,8 @@
                 <label><input type="checkbox" name="social" value="Instagram" onchange="saveOptions()"> Instagram</label>
                 <label><input type="checkbox" name="social" value="Facebook" onchange="saveOptions()"> Facebook</label>
                 <label><input type="checkbox" name="social" value="LinkedIn" onchange="saveOptions()"> LinkedIn</label>
-            </div>
+                 <label><input type="checkbox" name="social" value="Todas" onchange="toggleAll(this)"> Todas</label>
+	    </div>
         </div>
         
         <div class="option-container">
@@ -67,12 +68,29 @@
     </div>
     
     <script>
+	
+	function toggleAll(allCheckbox) {
+            const checkboxes = document.querySelectorAll('input[name="social"]:not([value="Todas"])');
+            if (allCheckbox.checked) {
+                checkboxes.forEach(cb => cb.checked = false);
+            }
+            saveOptions();
+        }
+
         function saveOptions() {
+	    const allCheckbox = document.querySelector('input[name="social"][value="Todas"]');
+            const checkboxes = document.querySelectorAll('input[name="social"]:not([value="Todas"])');
             const selectedSocials = [];
             document.querySelectorAll('input[name="social"]:checked').forEach(checkbox => {
                 selectedSocials.push(checkbox.value);
             });
             
+	    if (selectedSocials.length > 1 && allCheckbox.checked) {
+                allCheckbox.checked = false; // Desmarcar "Todas" si hay otra seleccionada
+            } else if (allCheckbox.checked) {
+                selectedSocials.push("Todas"); // Guardar "Todas" si está seleccionada
+            }
+
             const selectedPlan = document.getElementById('planSelect').value;
             
             localStorage.setItem('selectedSocials', JSON.stringify(selectedSocials));
@@ -87,6 +105,11 @@
                 checkbox.checked = savedSocials.includes(checkbox.value);
             });
             document.getElementById('planSelect').value = savedPlan;
+	    
+	    // Si "Todas" estaba guardado, desmarcar las demás
+            if (savedSocials.includes("Todas")) {
+                document.querySelectorAll('input[name="social"]:not([value="Todas"])').forEach(cb => cb.checked = false);
+            }
         }
         
         window.onload = loadOptions;
