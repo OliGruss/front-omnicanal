@@ -73,32 +73,58 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.js"></script>
 
     <script>
+        let selectedStartDate = "";
+        let selectedEndDate = "";
+
         // Inicializar el calendario
         $(document).ready(function() {
             $('#calendar').fullCalendar({
                 selectable: true,
+                selectHelper: true,
                 select: function(startDate, endDate) {
-                    // Actualizar la fecha seleccionada en el calendario
-                    const selectedDate = startDate.format('YYYY-MM-DD');
-                    document.getElementById('selectedDate').value = selectedDate;
-                    alert("Fecha seleccionada: " + selectedDate);
+                    selectedStartDate = startDate.format('YYYY-MM-DD');
+                    selectedEndDate = endDate.subtract(1, 'day').format('YYYY-MM-DD');
+                    
+                    // Eliminar selecciones previas
+                    $('#calendar').fullCalendar('removeEvents');
+                    
+                    // Agregar un evento para resaltar el rango seleccionado
+                    $('#calendar').fullCalendar('renderEvent', {
+                        title: 'Seleccionado',
+                        start: selectedStartDate,
+                        end: moment(selectedEndDate).add(1, 'day').format('YYYY-MM-DD'),
+                        rendering: 'background',
+                        backgroundColor: '#555',
+                        color: '#555'
+                    }, true);
                 }
             });
         });
 
-        // Función para manejar el clic en "Comenzar a Subir"
+        // Función para enviar datos a Make.com
         function startUploading() {
-            const selectedDate = document.getElementById('selectedDate') ? document.getElementById('selectedDate').value : '';
             const selectedTime = document.getElementById('time').value;
 
-            if (!selectedDate || !selectedTime) {
-                alert("Por favor, selecciona una fecha y una hora.");
+            if (!selectedStartDate || !selectedEndDate || !selectedTime) {
+                alert("Por favor, selecciona un rango de fechas y una hora.");
                 return;
             }
 
-            const selectedDateTime = selectedDate + ' ' + selectedTime;
-            alert("Subida comenzada para: " + selectedDateTime);
-            // Aquí puedes agregar lógica adicional para procesar la fecha y hora seleccionada
+            // Enviar solicitud a Make.com
+            fetch('https://hook.us2.make.com/f5w8orw9xhu8xbmsl5qjtnwa4yuwqtfj', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    start_date: selectedStartDate,
+                    end_date: selectedEndDate,
+                    time: selectedTime
+                })
+            })
+            .then(response => response.json())
+            .then(data => alert("Subida iniciada correctamente"))
+            .catch(error => alert("Error en la subida: " + error));
         }
     </script>
 
