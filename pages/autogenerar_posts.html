@@ -114,8 +114,8 @@
             const postElement = document.createElement("div");
             postElement.classList.add("post-container");
             postElement.innerHTML = `
-                <p>${textPrompt}</p>
                 <img src=userImageUrl alt="Imagen del post">
+		<p>${textPrompt}</p>
                 <button onclick="deletePost(this)">Eliminar Post</button>
                 <button onclick="addToQueue(this, '${textPrompt}', '${userImageUrl}')">Agregar a la Lista</button>
             `;
