@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Posts</title>
+    <title>Multi Generador</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -80,12 +80,71 @@
             font-weight: bold;
             margin-top: 10px;
         }
+	
+	/* New styles for preview only */
+        .empty-preview .placeholder-image {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .empty-preview .placeholder-text {
+            width: 100%;
+            height: 60px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .platform-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .platform-nav button {
+            width: 40px;
+            padding: 5px;
+            margin: 0 5px;
+        }
+        .platform-name {
+            min-width: 100px;
+            text-align: center;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 10px;
+        }
+        .username {
+            font-weight: bold;
+        }
+        .facebook .post-content { background-color: #fff; }
+        .instagram .post-content {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            padding: 2px;
+            border-radius: 8px;
+        }
+        .instagram .post-inner { 
+            background-color: #fff; 
+            padding: 8px; 
+            border-radius: 6px;
+        }
+        .linkedin .post-content { background-color: #fff; }
+        .x .post-content { background-color: #fff; }
     </style>
 </head>
 <body>
     <div class="wrapper">
         <div class="container" id="inputs">
-            <h3>Generar multiples posts</h3>
+            <h3>Multi Generador</h3>
             <p class="warning">⚠ Atención: Generar múltiples posts a la vez puede demorar algunos minutos.</p>
 
 	    <label>Descripción de tu empresa:</label>
@@ -110,12 +169,67 @@
         
         <div class="container" id="preview">
             <h3>Vista Previa de los Posts</h3>
-            <div id="posts-container"></div>
+            <div id="posts-container">
+	        <div class="empty-preview">
+                    <div class="placeholder-image"></div>
+                    <div class="placeholder-text"></div>
+                </div>
+	    </div>
         </div>
     </div>
     
     <script>
         
+	function showEmptyPreview() {
+            const postsContainer = document.getElementById("posts-container");
+            if (!postsContainer.querySelector('.post-container')) {
+                postsContainer.innerHTML = `
+                    <div class="empty-preview">
+                        <div class="placeholder-image"></div>
+                        <div class="placeholder-text"></div>
+                    </div>
+                `;
+            }
+        }
+
+        const platforms = ['facebook', 'instagram', 'x', 'linkedin'];
+
+        function updatePostDisplay(postContainer, platformIndex, text, imageUrl) {
+            const postContent = postContainer.querySelector('.post-content');
+            const platform = platforms[platformIndex];
+            
+            // Remove all platform classes and inner div
+            platforms.forEach(p => postContent.classList.remove(p));
+            postContent.classList.add(platform);
+            
+            // Update content based on platform
+            let contentHTML = `
+                <div class="profile-header">
+                    <div class="profile-pic"></div>
+                    <span class="username">TuUsuario</span>
+                </div>
+            `;
+            
+            if (platform === 'instagram') {
+                contentHTML += `
+                    <img src="${imageUrl}" alt="Imagen del post">
+                    <p>${text}</p>
+                `;
+            } else {
+                contentHTML += `
+                    <p>${text}</p>
+                    <img src="${imageUrl}" alt="Imagen del post">
+                `;
+            }
+            
+            // Special handling for Instagram gradient
+            if (platform === 'instagram') {
+                postContent.innerHTML = `<div class="post-inner">${contentHTML}</div>`;
+            } else {
+                postContent.innerHTML = contentHTML;
+            }
+        }
+
         async function generatePost() {
             const button = document.getElementById("generate-button");
             button.textContent = "Generando posts...";
@@ -150,9 +264,21 @@
                 data.forEach(post => {
                     const postElement = document.createElement("div");
                     postElement.classList.add("post-container");
+                    postElement.dataset.platformIndex = "0"; // Start with Facebook
                     postElement.innerHTML = `
-                        <img src="${post.image_url}" alt="Imagen del post">
-			<p>${post.text}</p>
+                        <div class="platform-nav">
+                            <button onclick="changePlatform(this, -1)">←</button>
+                            <span class="platform-name">Facebook</span>
+                            <button onclick="changePlatform(this, 1)">→</button>
+                        </div>
+                        <div class="post-content facebook">
+                            <div class="profile-header">
+                                <div class="profile-pic"></div>
+                                <span class="username">TuUsuario</span>
+                            </div>
+                            <p>${post.text}</p>
+                            <img src="${post.image_url}" alt="Imagen del post">
+                        </div>
                         <button onclick="deletePost(this)">Eliminar Post</button>
                         <button onclick="addToQueue(this, '${post.text}', '${post.image_url}')">Agregar a la Lista</button>
                     `;
@@ -170,6 +296,43 @@
             button.parentElement.remove();
         }
         
+	function updatePlatformStyle(select) {
+            const postContent = select.nextElementSibling;
+            const platforms = ['facebook', 'instagram', 'linkedin', 'x'];
+            platforms.forEach(platform => {
+                postContent.classList.remove(platform);
+                const inner = postContent.querySelector('.post-inner');
+                if (inner) inner.remove();
+            });
+            
+            postContent.classList.add(select.value);
+            if (select.value === 'instagram') {
+                const content = postContent.innerHTML;
+                postContent.innerHTML = `<div class="post-inner">${content}</div>`;
+            }
+        }
+
+	function changePlatform(button, direction) {
+            const postContainer = button.closest('.post-container');
+            let platformIndex = parseInt(postContainer.dataset.platformIndex);
+            const platformName = postContainer.querySelector('.platform-name');
+            const text = postContainer.querySelector('p').textContent;
+            const imageUrl = postContainer.querySelector('img').src;
+            
+            platformIndex = (platformIndex + direction + platforms.length) % platforms.length;
+            postContainer.dataset.platformIndex = platformIndex;
+            
+            const platformNames = {
+                'facebook': 'Facebook',
+                'instagram': 'Instagram',
+                'x': 'X',
+                'linkedin': 'LinkedIn'
+            };
+            
+            platformName.textContent = platformNames[platforms[platformIndex]];
+            updatePostDisplay(postContainer, platformIndex, text, imageUrl);
+        }
+	
         function addToQueue(button, texto, imageUrl) {
             const text = document.getElementById("text-prompt").value;
             const selectedSocials = JSON.parse(localStorage.getItem('selectedSocials')) || [];
