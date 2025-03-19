@@ -92,13 +92,13 @@
                 data.forEach(item => {
                     const row = tableBody.insertRow();
                     row.insertCell(0).textContent = item.idPost;
-                    row.insertCell(1).textContent = `$${item.costoDalle}`;
-                    row.insertCell(2).textContent = `$${item.costoMake}`;
+                    row.insertCell(1).textContent = item.costoDalle;
+                    row.insertCell(2).textContent = item.costoMake;
                     row.insertCell(3).textContent = item.fecha;
                     
-                    totalCost += parseFloat(item.costoDalle) + parseFloat(item.costoMake);
+                    totalCost += item.costoDalle + item.costoMake;
                 });
-                document.getElementById('totalCost').textContent = `Costo Total: $${totalCost.toFixed(2)}`;
+                document.getElementById('totalCost').textContent = `Costo Total: ${totalCost.toFixed(2)}`;
             } catch (error) {
                 console.error('Error al cargar los datos:', error);
             }
