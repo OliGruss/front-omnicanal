@@ -374,6 +374,74 @@
                 background-size: 80% auto;
             }
         }
+    
+    	/* Modal Background */
+	.modal {
+   	     display: none; /* Ensures modal is hidden on page load */
+   	     position: fixed;
+   	     z-index: 1000;
+  	     left: 0;
+   	     top: 0;
+   	     width: 100%;
+   	     height: 100%;
+   	     background-color: rgba(0, 0, 0, 0.5);
+   	     justify-content: center;
+   	     align-items: center;
+	}
+
+	/* MODAL CONTENT - Centered Box */
+	.modal-content {
+   	     background: white;
+   	     padding: 20px;
+    	     border-radius: 10px;
+   	     text-align: center;
+   	     width: 90%; /* Prevents overflow */
+   	     max-width: 400px; /* Fixed width */
+   	     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+   	     position: relative;
+	}
+
+	/* CLOSE BUTTON */
+	.close {
+   	     position: absolute;
+   	     top: 10px;
+   	     right: 15px;
+   	     font-size: 24px;
+   	     cursor: pointer;
+	}
+
+	/* INPUT CONTAINER */
+	.input-container {
+  	    display: flex;
+    	    flex-direction: column;
+   	    gap: 10px;
+	}
+
+	/* INPUT FIELDS */
+	.input-container input {
+   	     width: calc(100% - 20px); /* Ensures it fits inside container */
+   	     padding: 12px;
+    	    border: 1px solid #ddd;
+    	    border-radius: 5px;
+   	    font-size: 16px;
+	}
+
+	/* BUTTON STYLING */
+	.modal-content button {
+   	     width: 100%;
+  	     padding: 12px;
+   	     background-color: #1a73e8;
+   	     color: white;
+   	     border: none;
+   	     border-radius: 5px;
+  	     cursor: pointer;
+   	     font-size: 16px;
+   	     margin-top: 10px;
+	}
+
+	.modal-content button:hover {
+    	    background-color: #1557b0;
+	}
     </style>
 </head>
 <body>
@@ -404,7 +472,8 @@
                             </div>
                             <button type="button" onclick="validateLogin()">Sign in</button>
                             <div id="error-message" class="error-message">Usuario o contraseña incorrectos</div>
-                        </div>
+                            <button id="open-register-modal">Registrate</button>
+			</div>
                     </div>
                 </div>
             </div>
@@ -560,26 +629,115 @@
         });
 
         // Script para validar usuario y contraseña
-        function validateLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('error-message');
+	// Register User
+      document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("register-modal");
+        const openBtn = document.getElementById("open-register-modal");
+        const closeBtn = document.querySelector(".close");
 
-            // Credenciales predefinidas (NO seguro para producción)
-            const validEmail = "admin@callbotia.com";
-            const validPassword = "1234";
+        // OPEN MODAL when clicking "Registrarte"
+        openBtn.addEventListener("click", function () {
+            modal.style.display = "flex";
+        });
 
-            if (email === validEmail && password === validPassword) {
-                // Redirigir a main.html si las credenciales son correctas
-                window.location.href = "main.html";
-            } else {
-                // Mostrar mensaje de error si las credenciales son incorrectas
-                errorMessage.style.display = "block";
-                setTimeout(() => {
-                    errorMessage.style.display = "none";
-                }, 3000); // Ocultar mensaje después de 3 segundos
+        // CLOSE MODAL when clicking "X"
+        closeBtn.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // CLOSE MODAL when clicking outside of it
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
             }
+        });
+
+        // REGISTER USER FUNCTION
+        window.registerUser = function () {
+            const name = document.getElementById("reg-name").value;
+            const email = document.getElementById("reg-email").value;
+            const password = document.getElementById("reg-password").value;
+            const message = document.getElementById("reg-message");
+
+            if (!name || !email || !password) {
+                message.textContent = "Todos los campos son obligatorios.";
+                message.style.color = "red";
+                return;
+            }
+
+            if (localStorage.getItem(email)) {
+                message.textContent = "Este correo ya está registrado.";
+                message.style.color = "red";
+                return;
+            }
+
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 2);
+
+            localStorage.setItem(email, JSON.stringify({
+                name: name,
+                password: password,
+                expiry: expiryDate
+            }));
+
+            message.textContent = "¡Account created! You may sign in. Your account will expire in 2 days.";
+            message.style.color = "green";
+
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 2000);
+        };
+    });
+
+    // Login User
+    function validateLogin() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('error-message');
+
+        const userData = localStorage.getItem(email);
+
+        if (!userData) {
+            errorMessage.textContent = "User not found.";
+            errorMessage.style.display = "block";
+            return;
         }
+
+        const user = JSON.parse(userData);
+        const currentDate = new Date();
+
+        // Check expiry
+        if (new Date(user.expiry) < currentDate) {
+            errorMessage.textContent = "Account expired.";
+            errorMessage.style.display = "block";
+            return;
+        }
+
+        // Check password
+        if (user.password !== password) {
+            errorMessage.textContent = "Invalid credentials.";
+            errorMessage.style.display = "block";
+            return;
+        }
+
+        alert("Login successful!");
+        window.location.href = "main.html"; // Redirect to dashboard
+    }        
     </script>
+
+    <!-- Registration Modal (Initially Hidden) -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Registro</h2>
+            <div class="input-container">
+                <input type="text" id="reg-name" placeholder="Name" required>
+                <input type="email" id="reg-email" placeholder="Email" required>
+                <input type="password" id="reg-password" placeholder="Password" required>
+            </div>
+            <button onclick="registerUser()">Create account</button>
+            <p id="reg-message"></p>
+        </div>
+    </div>
 </body>
 </html>
