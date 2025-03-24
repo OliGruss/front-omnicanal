@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialMedia BotIA - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+        .login-section {
+            display: flex;
+            gap: 40px;
+            align-items: stretch;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .forms-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            height: 655px;
+            box-sizing: border-box;
+        }
+        .login-form {
+            padding: 35px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            position: relative;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .login-form:hover {
+            transform: translateY(-5px);
+        }
+        .login-form h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a73e8;
+            text-align: center;
+        }
+        .login-form-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://via.placeholder.com/400x655?text=Form+Decor');
+            background-size: 50% auto;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        .login-form-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        .login-form-content img {
+            width: 60px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .social-login button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fff;
+            cursor: pointer;
+            width: 100%;
+            color: #444;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        .social-login button img {
+            width: 20px;
+            height: 20px;
+        }
+        .social-login button:hover {
+            background-color: #f0f0f8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #888;
+            font-size: 14px;
+            position: relative;
+            font-weight: 500;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #ccc;
+        }
+        .divider::before {
+            left: 0;
+        }
+        .divider::after {
+            right: 0;
+        }
+        .email-login {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .email-login input {
+            padding: 14px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #333;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+        .email-login input:focus {
+            border-color: #1a73e8;
+            outline: none;
+        }
+        .email-login .forgot-password {
+            text-align: right;
+            font-size: 14px;
+        }
+        .email-login .forgot-password a {
+            color: #1a73e8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .email-login .forgot-password a:hover {
+            color: #1557b0;
+        }
+        .email-login button {
+            padding: 14px;
+            font-size: 16px;
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            width: 100%;
+            font-weight: 500;
+        }
+        .email-login button:hover {
+            background-color: #1557b0;
+            transform: translateY(-2px);
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+        .flyer-container {
+            flex: 2;
+            min-width: 300px;
+            max-width: 750px;
+            height: 655px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        .flyer {
+            width: 100%;
+            height: 90%;
+            position: relative;
+        }
+        .gradient-1 { background: linear-gradient(to right, #fce4ec, #f8e1f0); }
+        .gradient-2 { background: radial-gradient(circle, #e1bee7, #eeddf3); }
+        .gradient-3 { background: linear-gradient(to bottom, #b3e5fc, #e6f3ff); }
+        .gradient-4 { background: radial-gradient(ellipse at bottom, #f1f8e9, #e6f2e1); }
+        .gradient-5 { background: radial-gradient(circle, #fff3e0, #fce8d5); }
+        .gradient-6 { background: linear-gradient(45deg, #fff9c4, #fff8e1); }
+        .gradient-7 { background: linear-gradient(to right, #e0f7fa, #d6e6ff); }
+        .gradient-8 { background: linear-gradient(135deg, #f0f4f8, #eef2f6); }
+        .flyer .phrase {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .flyer .phrase.active {
+            opacity: 1;
+        }
+        .phrase p {
+            margin: 0;
+            line-height: 1.2;
+        }
+        .big-text {
+            font-size: 60px;
+            font-weight: 500;
+        }
+        .emphasis-text {
+            font-size: 90px;
+            font-weight: 700;
+        }
+        .medium-text {
+            font-size: 40px;
+            font-weight: 500;
+        }
+        .small-text {
+            font-size: 30px;
+            font-weight: 500;
+        }
+        .updates-footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            position: relative;
+            z-index: 2;
+        }
+        .updates-footer .label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a73e8;
+            background-color: #f0f4f8;
+            padding: 6px 12px;
+            border-radius: 15px;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .updates-footer .label:hover {
+            background-color: #e0e7ff;
+            color: #1557b0;
+        }
+        .updates-footer .arrows {
+            display: flex;
+            gap: 10px;
+        }
+        .updates-footer .arrows button {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #1a73e8;
+            transition: all 0.3s;
+        }
+        .updates-footer .arrows button:hover {
+            background-color: #1a73e8;
+            color: #fff;
+            transform: scale(1.1);
+        }
+        .social-icons {
+            text-align: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+        .social-icons img {
+            width: 30px;
+            height: 30px;
+            margin: 0 10px;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        .social-icons img:hover {
+            filter: grayscale(0);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        @media (max-width: 900px) {
+            .container {
+                margin-top: 20px;
+            }
+            .login-section {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 30px;
+                margin-bottom: 20px;
+            }
+            .forms-container {
+                max-width: 100%;
+                align-items: center;
+                height: auto;
+            }
+            .login-form {
+                max-width: 100%;
+                margin: 0 auto;
+                padding: 25px;
+            }
+            .flyer-container {
+                min-width: 300px;
+                max-width: 100%;
+                height: 405px;
+                margin-top: 20px;
+            }
+            .flyer {
+                height: 90%;
+            }
+            .phrase .big-text {
+                font-size: 40px;
+            }
+            .phrase .emphasis-text {
+                font-size: 60px;
+            }
+            .phrase .medium-text {
+                font-size: 30px;
+            }
+            .phrase .small-text {
+                font-size: 20px;
+            }
+            .login-form-background {
+                background-size: 80% auto;
+            }
+        }
+    
+    	/* Modal Background */
+	.modal {
+   	     display: none; /* Ensures modal is hidden on page load */
+   	     position: fixed;
+   	     z-index: 1000;
+  	     left: 0;
+   	     top: 0;
+   	     width: 100%;
+   	     height: 100%;
+   	     background-color: rgba(0, 0, 0, 0.5);
+   	     justify-content: center;
+   	     align-items: center;
+	}
+
+	/* MODAL CONTENT - Centered Box */
+	.modal-content {
+   	     background: white;
+   	     padding: 20px;
+    	     border-radius: 10px;
+   	     text-align: center;
+   	     width: 90%; /* Prevents overflow */
+   	     max-width: 400px; /* Fixed width */
+   	     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+   	     position: relative;
+	}
+
+	/* CLOSE BUTTON */
+	.close {
+   	     position: absolute;
+   	     top: 10px;
+   	     right: 15px;
+   	     font-size: 24px;
+   	     cursor: pointer;
+	}
+
+	/* INPUT CONTAINER */
+	.input-container {
+  	    display: flex;
+    	    flex-direction: column;
+   	    gap: 10px;
+	}
+
+	/* INPUT FIELDS */
+	.input-container input {
+   	     width: calc(100% - 20px); /* Ensures it fits inside container */
+   	     padding: 12px;
+    	    border: 1px solid #ddd;
+    	    border-radius: 5px;
+   	    font-size: 16px;
+	}
+
+	/* BUTTON STYLING */
+	.modal-content button {
+   	     width: 100%;
+  	     padding: 12px;
+   	     background-color: #1a73e8;
+   	     color: white;
+   	     border: none;
+   	     border-radius: 5px;
+  	     cursor: pointer;
+   	     font-size: 16px;
+   	     margin-top: 10px;
+	}
+
+	.modal-content button:hover {
+    	    background-color: #1557b0;
+	}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-section">
+            <div class="forms-container">
+                <div class="login-form">
+                    <div class="login-form-background"></div>
+                    <div class="login-form-content">
+                        <img src="https://i.ibb.co/hJttSZKs/Logo-Callbotia-pequena-ondo-transparente-Social-Media-Botia-Final-removebg-preview.png" alt="SocialMedia BotIA Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/60?text=Logo+Fallback';">
+                        <h2>Log in to your account</h2>
+                        <div class="social-login">
+                            <button onclick="window.location.href='https://accounts.google.com/signin';">
+                                <img src="https://www.google.com/favicon.ico" alt="Google Icon">
+                                Sign in with Google
+                            </button>
+                            <button onclick="window.location.href='https://github.com/login';">
+                                <img src="https://www.github.com/favicon.ico" alt="GitHub Icon">
+                                Sign in with GitHub
+                            </button>
+                        </div>
+                        <div class="divider">Or continue with email</div>
+                        <div class="email-login">
+                            <input type="email" id="email" placeholder="Enter your email address" required>
+                            <input type="password" id="password" placeholder="Password" required>
+                            <div class="forgot-password">
+                                <a href="#">Forgot password?</a>
+                            </div>
+                            <button type="button" onclick="validateLogin()">Sign in</button>
+                            <div id="error-message" class="error-message">Usuario o contraseña incorrectos</div>
+                            <button id="open-register-modal">Registrate</button>
+			</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flyer-container" id="flyer-container">
+                <div class="flyer">
+                    <div class="phrase active">
+                        <p><span class="emphasis-text" style="text-align: right;">Crea</span> <span class="big-text" style="text-align: right;">60</span> <span class="big-text" style="text-align: right;">historias</span></p>
+                        <p><span class="medium-text" style="text-align: center;">de</span> <span class="medium-text" style="text-align: center;">Instagram</span></p>
+                        <p><span class="big-text" style="text-align: right;">en</span> <span class="big-text" style="text-align: right;">3</span> <span class="small-text" style="text-align: right; position: relative; top: 10px;">minutos</span></p>
+                        <p><span class="medium-text" style="text-align: center;">y domina tu presencia online</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="big-text" style="text-align: left;">Inteligencia</span> <span class="big-text" style="text-align: left;">artificial</span></p>
+                        <p><span class="medium-text" style="text-align: center;">que</span> <span class="medium-text" style="text-align: center;">crea</span></p>
+                        <p><span class="big-text" style="text-align: left;">contenido</span> <span class="emphasis-text" style="text-align: left;">irresistible</span> <span class="small-text" style="text-align: left; position: relative; top: 10px;">para</span></p>
+                        <p><span class="medium-text" style="text-align: center;">tus redes sociales, 24/7</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="emphasis-text" style="text-align: right;">Multiplica</span> <span class="big-text" style="text-align: right;">tu</span> <span class="big-text" style="text-align: right;">alcance</span></p>
+                        <p><span class="medium-text" style="text-align: center;">en</span> <span class="medium-text" style="text-align: center;">redes</span></p>
+                        <p><span class="big-text" style="text-align: right;">Facebook,</span> <span class="big-text" style="text-align: right;">Instagram,</span> <span class="small-text" style="text-align: right; position: relative; top: 10px;">Twitter</span></p>
+                        <p><span class="medium-text" style="text-align: center;">y LinkedIn</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="big-text" style="text-align: left;">Libérate</span> <span class="emphasis-text" style="text-align: left;">del</span> <span class="big-text" style="text-align: left;">estrés</span></p>
+                        <p><span class="medium-text" style="text-align: center;">de</span> <span class="medium-text" style="text-align: center;">crear</span></p>
+                        <p><span class="big-text" style="text-align: left;">contenido.</span> <span class="big-text" style="text-align: left;">Nuestra</span> <span class="small-text" style="text-align: left; position: relative; top: 10px;">IA</span></p>
+                        <p><span class="medium-text" style="text-align: center;">lo hace por ti</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="emphasis-text" style="text-align: right;">Convierte</span> <span class="big-text" style="text-align: right;">tus</span> <span class="big-text" style="text-align: right;">prompts</span></p>
+                        <p><span class="medium-text" style="text-align: center;">en</span> <span class="medium-text" style="text-align: center;">publicaciones</span></p>
+                        <p><span class="big-text" style="text-align: right;">virales</span> <span class="big-text" style="text-align: right;">que</span> <span class="small-text" style="text-align: right; position: relative; top: 10px;">conectan</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="big-text" style="text-align: left;">Ahorra</span> <span class="emphasis-text" style="text-align: left;">horas</span> <span class="big-text" style="text-align: left;">de</span></p>
+                        <p><span class="medium-text" style="text-align: center;">trabajo</span> <span class="medium-text" style="text-align: center;">y</span></p>
+                        <p><span class="big-text" style="text-align: left;">aumenta</span> <span class="big-text" style="text-align: left;">tu</span> <span class="small-text" style="text-align: left; position: relative; top: 10px;">engagement</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="emphasis-text" style="text-align: right;">Domina</span> <span class="big-text" style="text-align: right;">el</span> <span class="big-text" style="text-align: right;">algoritmo</span></p>
+                        <p><span class="medium-text" style="text-align: center;">con</span> <span class="medium-text" style="text-align: center;">contenido</span></p>
+                        <p><span class="big-text" style="text-align: right;">fresco</span> <span class="big-text" style="text-align: right;">y</span> <span class="small-text" style="text-align: right; position: relative; top: 10px;">constante</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="big-text" style="text-align: left;">Nuestra</span> <span class="emphasis-text" style="text-align: left;">IA</span> <span class="big-text" style="text-align: left;">se</span></p>
+                        <p><span class="medium-text" style="text-align: center;">adapta</span> <span class="medium-text" style="text-align: center;">a</span></p>
+                        <p><span class="big-text" style="text-align: left;">tendencias</span> <span class="big-text" style="text-align: left;">y</span> <span class="small-text" style="text-align: left; position: relative; top: 10px;">relevancia</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="emphasis-text" style="text-align: right;">Social</span> <span class="big-text" style="text-align: right;">Media</span> <span class="big-text" style="text-align: right;">BotIA:</span></p>
+                        <p><span class="medium-text" style="text-align: center;">Tu</span> <span class="medium-text" style="text-align: center;">estratega</span></p>
+                        <p><span class="big-text" style="text-align: right;">de</span> <span class="big-text" style="text-align: right;">contenido</span> <span class="small-text" style="text-align: right; position: relative; top: 10px;">IA</span></p>
+                        <p><span class="medium-text" style="text-align: center;">que cautiva y convierte</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="big-text" style="text-align: left;">Con</span> <span class="emphasis-text" style="text-align: left;">Social</span> <span class="big-text" style="text-align: left;">Media</span></p>
+                        <p><span class="medium-text" style="text-align: center;">la</span> <span class="medium-text" style="text-align: center;">creatividad</span></p>
+                        <p><span class="big-text" style="text-align: left;">no</span> <span class="big-text" style="text-align: left;">tiene</span> <span class="small-text" style="text-align: left; position: relative; top: 10px;">límites</span></p>
+                        <p><span class="medium-text" style="text-align: center;">Genera contenido único</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="emphasis-text" style="text-align: right;">Social</span> <span class="big-text" style="text-align: right;">Media</span> <span class="big-text" style="text-align: right;">BotIA:</span></p>
+                        <p><span class="medium-text" style="text-align: center;">El</span> <span class="medium-text" style="text-align: center;">piloto</span></p>
+                        <p><span class="big-text" style="text-align: right;">automático</span> <span class="big-text" style="text-align: right;">que</span> <span class="small-text" style="text-align: right; position: relative; top: 10px;">impulsa</span></p>
+                        <p><span class="medium-text" style="text-align: center;">tu marca</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="big-text" style="text-align: left;">Social</span> <span class="emphasis-text" style="text-align: left;">Media</span> <span class="big-text" style="text-align: left;">BotIA</span></p>
+                        <p><span class="medium-text" style="text-align: center;">impulsado</span> <span class="medium-text" style="text-align: center;">por</span></p>
+                        <p><span class="big-text" style="text-align: left;">CallBotIA:</span> <span class="big-text" style="text-align: left;">Automatización</span> <span class="small-text" style="text-align: left; position: relative; top: 10px;">inteligente</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="emphasis-text" style="text-align: right;">CallBotIA</span> <span class="big-text" style="text-align: right;">presenta</span> <span class="big-text" style="text-align: right;">Social</span></p>
+                        <p><span class="medium-text" style="text-align: center;">Media</span> <span class="medium-text" style="text-align: center;">BotIA:</span></p>
+                        <p><span class="big-text" style="text-align: right;">Eleva</span> <span class="big-text" style="text-align: right;">tu</span> <span class="small-text" style="text-align: right; position: relative; top: 10px;">estrategia</span></p>
+                        <p><span class="medium-text" style="text-align: center;">de marketing</span></p>
+                    </div>
+                    <div class="phrase">
+                        <p><span class="big-text" style="text-align: left;">Social</span> <span class="emphasis-text" style="text-align: left;">Media</span> <span class="big-text" style="text-align: left;">BotIA</span></p>
+                        <p><span class="medium-text" style="text-align: center;">la</span> <span class="medium-text" style="text-align: center;">solución</span></p>
+                        <p><span class="big-text" style="text-align: left;">de</span> <span class="big-text" style="text-align: left;">CallBotIA:</span> <span class="small-text" style="text-align: left; position: relative; top: 10px;">Domina</span></p>
+                        <p><span class="medium-text" style="text-align: center;">tus redes sociales</span></p>
+                    </div>
+                </div>
+                <div class="updates-footer">
+                    <a href="https://callbotia.com" class="label">Latest Updates</a>
+                    <div class="arrows">
+                        <button onclick="prevPhrase()">←</button>
+                        <button onclick="nextPhrase()">→</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/callbotia_test/" target="_blank">
+                <img src="https://instagram.com/static/images/ico/favicon.ico/36b3ee2d91ed.ico" alt="Instagram" onerror="this.src='https://via.placeholder.com/30?text=IG';">
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61573609741325&sk" target="_blank">
+                <img src="https://www.facebook.com/favicon.ico" alt="Facebook" onerror="this.src='https://via.placeholder.com/30?text=FB';">
+            </a>
+            <a href="https://www.linkedin.com/company/106615940" target="_blank">
+                <img src="https://www.linkedin.com/favicon.ico" alt="LinkedIn" onerror="this.src='https://via.placeholder.com/30?text=LI';">
+            </a>
+            <a href="https://x.com/CallbotI53730" target="_blank">
+                <img src="https://www.twitter.com/favicon.ico" alt="Twitter" onerror="this.src='https://via.placeholder.com/30?text=TW';">
+            </a>
+        </div>
+    </div>
+    <script>
+        // Script para el carrusel de frases
+        document.addEventListener('DOMContentLoaded', function () {
+            const phrases = document.querySelectorAll('.flyer .phrase');
+            const flyer = document.querySelector('.flyer');
+            let currentIndex = 0;
+
+            const gradientClasses = [
+                'gradient-1',
+                'gradient-2',
+                'gradient-3',
+                'gradient-4',
+                'gradient-5',
+                'gradient-6',
+                'gradient-7',
+                'gradient-8'
+            ];
+
+            if (!flyer || phrases.length === 0) {
+                console.error('Error: Flyer or phrases not found in the DOM.');
+                return;
+            }
+
+            function showPhrase(index) {
+                phrases.forEach(phrase => phrase.classList.remove('active'));
+                phrases[index].classList.add('active');
+                const gradientClass = gradientClasses[index % gradientClasses.length];
+                gradientClasses.forEach(cls => flyer.classList.remove(cls));
+                flyer.classList.add(gradientClass);
+            }
+
+            function nextPhrase() {
+                currentIndex = (currentIndex + 1) % phrases.length;
+                showPhrase(currentIndex);
+            }
+
+            function prevPhrase() {
+                currentIndex = (currentIndex - 1 + phrases.length) % phrases.length;
+                showPhrase(currentIndex);
+            }
+
+            showPhrase(currentIndex);
+            setInterval(nextPhrase, 5000);
+        });
+
+        // Script para validar usuario y contraseña
+	// Register User
+      document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("register-modal");
+        const openBtn = document.getElementById("open-register-modal");
+        const closeBtn = document.querySelector(".close");
+
+        // OPEN MODAL when clicking "Registrarte"
+        openBtn.addEventListener("click", function () {
+            modal.style.display = "flex";
+        });
+
+        // CLOSE MODAL when clicking "X"
+        closeBtn.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // CLOSE MODAL when clicking outside of it
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        // REGISTER USER FUNCTION
+        window.registerUser = function () {
+    	    const formData = new FormData();
+   	    formData.append("action", "register");
+   	    formData.append("name", document.getElementById("reg-name").value);
+   	    formData.append("email", document.getElementById("reg-email").value);
+  	    formData.append("password", document.getElementById("reg-password").value);
+
+    	    fetch("backend.php", {
+       	    	method: "POST",
+       		body: formData
+   	   })
+    	   .then(response => response.json())
+   	   .then(data => alert(data.message))
+   	   .catch(error => console.error("Error:", error));
+        }
+
+
+        // Login User
+        function validateLogin() {
+        const formData = new FormData();
+        formData.append("action", "login");
+        formData.append("email", document.getElementById("email").value);
+        formData.append("password", document.getElementById("password").value);
+
+         fetch("backend.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Login successful") {
+                alert("Login successful!");
+                window.location.href = "main.html";
+            } else {
+                document.getElementById("error-message").textContent = data.message;
+                document.getElementById("error-message").style.display = "block";
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+       
+    </script>
+
+    <!-- Registration Modal (Initially Hidden) -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Registro</h2>
+            <div class="input-container">
+                <input type="text" id="reg-name" placeholder="Name" required>
+                <input type="email" id="reg-email" placeholder="Email" required>
+                <input type="password" id="reg-password" placeholder="Password" required>
+            </div>
+            <button onclick="registerUser()">Create account</button>
+            <p id="reg-message"></p>
+        </div>
+    </div>
+</body>
+</html>
